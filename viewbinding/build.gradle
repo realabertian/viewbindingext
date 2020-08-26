@@ -1,6 +1,13 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'com.android.library'
+//apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'com.jfrog.bintray'
+    id 'maven-publish'
+}
 
 android {
     compileSdkVersion 30
@@ -24,6 +31,14 @@ android {
     }
 }
 
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+group = 'org.aber.viewbinding'
+version = '1.0.0'
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -34,4 +49,66 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.databinding:viewbinding:4.0.1'
 
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name = 'The Apache License, Version 2.0'
+            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        }
+    }
+
+    developers {
+        developer {
+            id = "realabertian"
+            name = 'aber tian'
+            email = 'realabertian@gmail.com'
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = "org.aber.viewbinding"
+                artifactId = 'viewbindingext'
+                artifact(sourceJar)
+                version = '1.0.0'
+//                pom.withXml {
+//                    def root = asNode()
+//                    root.appendNode('description', 'A extension for ViewBinding')
+//                    root.appendNode('name', 'viewbindingext')
+//                    root.appendNode('url', 'https://github.com/realabertian/viewbindingext')
+//                    root.children().last() + pomConfig
+//                }
+            }
+        }
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty('user')
+    key = properties.getProperty('key')
+    publications = ['release']
+    pkg {
+        repo = "android"
+        name = "viewbindingext"
+        userOrg = 'acgn'
+        licenses = ['Apache-2.0']
+        vcsUrl = "https://github.com/realabertian/viewbindingext"
+        publish = true
+        version {
+            name = '1.0.0'
+            desc = 'ViewBinding Extension'
+            released = new Date()
+            vcsTag = 'v1.0.0'
+        }
+    }
 }
