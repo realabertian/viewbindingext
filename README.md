@@ -34,3 +34,15 @@ class MainActivity : AppCompatActivity {
         setContentView(binding.root)
     }
 }
+
+```
+
+## Usage [ ![Download](https://api.bintray.com/packages/acgn/android/viewbindingext/images/download.svg?version=1.0.0) ](https://bintray.com/acgn/android/viewbindingext/1.0.0/link)
+
+Gradle dependency
+
+```gralde
+
+implementation 'org.aber.viewbinding:viewbindingext:1.0.0'
+
+```
