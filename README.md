@@ -41,8 +41,6 @@ class MainActivity : AppCompatActivity {
 
 Gradle dependency
 
-```gralde
-
+```groovy
 implementation 'org.aber.viewbinding:viewbindingext:1.0.0'
-
 ```
